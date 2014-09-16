@@ -1,6 +1,6 @@
-# WP Obfuscator #
+# Castlegate IT WP Obfuscator #
 
-WP Obfuscator is a WordPress plugin that automatically obfuscates email addresses in the main content and excerpts of posts and pages by randomly replacing characters with HTML character entities. It also provides a shortcode that can be used to obfuscate text anywhere in that shortcodes are processed:
+Castlegate IT WP Obfuscator is a WordPress plugin that automatically obfuscates email addresses in the main content and excerpts of posts and pages by randomly replacing characters with HTML character entities. It also provides a shortcode that can be used to obfuscate text anywhere in that shortcodes are processed:
 
     Lorem ipsum [obfuscate]dolor sit amet[/obfuscate] consectetur
 

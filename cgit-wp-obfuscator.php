@@ -18,31 +18,34 @@ License: MIT
  * Replaces characters within a string with decimal or hexadecimal HTML entities
  * at random. Excludes certain forbidden characters.
  */
-function cgit_obfuscate ($str) {
-
-    $output    = '';
+function cgit_obfuscate($str) {
+    $output = '';
     $forbidden = array('@', '.', ':');
 
     for ($i = 0; $i < strlen($str); $i++) {
         $obfuscate = in_array($str[$i], $forbidden) ? 1 : rand(0, 1);
+
         if ($obfuscate) {
             $code = ord($str[$i]);
             $hex = rand(0, 1);
+
             if ($hex) {
                 $code = dechex($code);
+
                 while (strlen($code) < 4) {
-                    $code = "0$code";
+                    $code = '0' . $code;
                 }
-                $code = "x$code";
+
+                $code = 'x' . $code;
             }
-            $output .= "&#$code;";
+
+            $output .= '&#' . $code . ';';
         } else {
             $output .= $str[$i];
         }
     }
 
     return $output;
-
 }
 
 /**
@@ -51,38 +54,40 @@ function cgit_obfuscate ($str) {
  * Generates an obfuscated HTML mailto: link, with optional link text. If no
  * text is entered, the email address is used for the text of the link.
  */
-function cgit_obfuscate_link ($str, $text = FALSE) {
-
+function cgit_obfuscate_link($str, $text = false) {
     $protocol = cgit_obfuscate('mailto:');
-    $address  = cgit_obfuscate($str);
-    $text     = $text ? $text : $address;
+    $address = cgit_obfuscate($str);
+    $output = '<a href="' . $protocol . $address . '">';
 
-    return "<a href='$protocol$address'>$text</a>";
+    if ($text) {
+        $output .= $text;
+    } else {
+        $output .= $address;
+    }
 
+    $output .= '</a>';
+
+    return $output;
 }
 
 /**
- * Callback for filter function
+ * Obfuscate email addresses in content excerpts using filter
  */
-function cgit_obfuscate_callback ($matches) {
-    return cgit_obfuscate($matches[0]);
+foreach (['the_content', 'get_the_excerpt'] as $filter) {
+    add_filter($filter, function($content) {
+        return preg_replace_callback(
+            '/(mailto:)?[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]+/',
+            function($matches) {
+                return cgit_obfuscate($matches[0]);
+            },
+            $content
+        );
+    });
 }
-
-/**
- * Obfuscate email addresses in content and excerpts using filter
- */
-function cgit_obfuscate_content ($content) {
-    return preg_replace_callback('/(mailto:)?[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]+/', 'cgit_obfuscate_callback', $content);
-}
-
-add_filter('the_content', 'cgit_obfuscate_content');
-add_filter('get_the_excerpt', 'cgit_obfuscate_content');
 
 /**
  * Add shortcode
  */
-function cgit_obfuscate_shortcode ($atts, $content) {
-    return cgit_obfuscate( strip_tags($content) );
-}
-
-add_shortcode('obfuscate', 'cgit_obfuscate_shortcode');
+add_shortcode('obfuscate', function($atts, $content) {
+    return cgit_obfuscate(strip_tags($content));
+});

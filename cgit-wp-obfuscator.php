@@ -18,31 +18,25 @@ License: MIT
  * Replaces characters within a string with decimal or hexadecimal HTML entities
  * at random. Excludes certain forbidden characters.
  */
-function cgit_obfuscate($str) {
+function cgit_obfuscate($str, $mask = '@.:') {
+    $str = html_entity_decode($str);
     $output = '';
-    $forbidden = array('@', '.', ':');
 
     for ($i = 0; $i < strlen($str); $i++) {
-        $obfuscate = in_array($str[$i], $forbidden) ? 1 : rand(0, 1);
+        $obfuscate = strpos($mask, $str[$i]) !== false ? 1 : rand(0, 2);
 
-        if ($obfuscate) {
-            $code = ord($str[$i]);
-            $hex = rand(0, 1);
-
-            if ($hex) {
-                $code = dechex($code);
-
-                while (strlen($code) < 4) {
-                    $code = '0' . $code;
-                }
-
-                $code = 'x' . $code;
-            }
-
-            $output .= '&#' . $code . ';';
-        } else {
+        if (!$obfuscate) {
             $output .= $str[$i];
+            continue;
         }
+
+        $code = ord($str[$i]);
+
+        if (rand(0, 1)) {
+            $code = 'x' . str_pad(dechex($code), 4, '0', STR_PAD_LEFT);
+        }
+
+        $output .= '&#' . $code . ';';
     }
 
     return $output;

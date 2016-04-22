@@ -17,6 +17,11 @@ License: MIT
  *
  * Replaces characters within a string with decimal or hexadecimal HTML entities
  * at random. Excludes certain forbidden characters.
+ *
+ * @param string $str
+ * @param string $mask
+ *
+ * @return string
  */
 function cgit_obfuscate($str, $mask = '@.:') {
     $str = html_entity_decode($str);
@@ -47,6 +52,11 @@ function cgit_obfuscate($str, $mask = '@.:') {
  *
  * Generates an obfuscated HTML mailto: link, with optional link text. If no
  * text is entered, the email address is used for the text of the link.
+ *
+ * @param string $str
+ * @param string $text
+ *
+ * @return void
  */
 function cgit_obfuscate_link($str, $text = false) {
     $protocol = cgit_obfuscate('mailto:');

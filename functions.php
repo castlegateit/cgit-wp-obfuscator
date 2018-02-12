@@ -1,5 +1,7 @@
 <?php
 
+use \Cgit\Obfuscator\Obfuscator;
+
 /**
  * Return an obfuscated string
  *
@@ -8,7 +10,7 @@
  */
 function cgit_obfuscate($str)
 {
-    return (new \Cgit\Obfuscator\Obfuscator($str))->obfuscate();
+    return (new Obfuscator($str))->obfuscate();
 }
 
 /**
@@ -18,7 +20,7 @@ function cgit_obfuscate($str)
  * @param string $text
  * @return string
  */
-function cgit_obfuscate_link($email, $text = null)
+function cgit_obfuscate_link($email, $text = null, $attributes = [])
 {
-    return (new \Cgit\Obfuscator\Obfuscator($email))->obfuscateLink($text);
+    return (new Obfuscator($email))->obfuscateLink($text, $attributes);
 }

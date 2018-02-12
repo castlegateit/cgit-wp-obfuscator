@@ -19,3 +19,11 @@ echo $obfuscator->obfuscateLink(); // obfuscated HTML email link
 $obfuscator = new \Cgit\Obfuscator\ContentObfuscator($foo);
 echo $obfuscator->obfuscate(); // HTML content with email addresses obfuscated
 ~~~
+
+You can add attributes to links as associative arrays, for example:
+
+~~~ php
+echo cgit_obfuscate_link('example@example.com', 'email me', [
+    'class' => 'email-link',
+]);
+~~~

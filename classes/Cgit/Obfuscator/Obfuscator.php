@@ -48,14 +48,15 @@ class Obfuscator
      * @param string $text
      * @return string
      */
-    public function obfuscateLink($text = null)
+    public function obfuscateLink($text = null, $attributes = [])
     {
         if (is_null($text)) {
             $text = self::encode($this->source);
         }
 
-        return '<a href="' . self::encode('mailto:' . $this->source) . '">'
-            . $text . '</a>';
+        $attributes['href'] = self::encode('mailto:' . $this->source);
+
+        return '<a ' . $this->attributes($attributes) . '>' . $text . '</a>';
     }
 
     /**
@@ -95,5 +96,37 @@ class Obfuscator
 
         // Return the code as an HTML entity
         return '&#' . $code . ';';
+    }
+
+    /**
+     * Format attributes
+     *
+     * Converts an associative array into valid HTML attributes. Nested arrays
+     * are converted to space-separated strings.
+     *
+     * @param array $attributes
+     * @return string
+     */
+    private static function attributes($attributes)
+    {
+        $pairs = [];
+
+        if (!$attributes || !is_array($attributes)) {
+            return '';
+        }
+
+        foreach ($attributes as $key => $value) {
+            if (is_array($value)) {
+                $value = implode(' ', $value);
+            }
+
+            if ($key != 'href') {
+                $value = htmlspecialchars($value);
+            }
+
+            $pairs[] = $key . '="' . $value . '"';
+        }
+
+        return implode(' ', $pairs);
     }
 }

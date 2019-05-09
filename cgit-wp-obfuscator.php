@@ -8,7 +8,7 @@ Description: Automatically obfuscate email links in content, excerpts, and elsew
 Version: 2.1
 Author: Castlegate IT
 Author URI: http://www.castlegateit.co.uk/
-License: AGPL
+License: AGPLv3
 
 */
 

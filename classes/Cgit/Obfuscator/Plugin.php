@@ -13,7 +13,8 @@ class Plugin
     {
         add_filter('the_content', [$this, 'sanitizeContent']);
         add_filter('get_the_excerpt', [$this, 'sanitizeContent']);
-        add_filter('acf/load_value', [$this, 'sanitizeContent']);
+        add_filter('acf/load_value/type=textarea', [$this, 'sanitizeContent']);
+        add_filter('acf/load_value/type=wysiwyg', [$this, 'sanitizeContent']);
     }
 
     /**

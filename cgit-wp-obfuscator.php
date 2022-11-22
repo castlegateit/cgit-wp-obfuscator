@@ -5,10 +5,10 @@
 Plugin Name: Castlegate IT WP Obfuscator
 Plugin URI: http://github.com/castlegateit/cgit-wp-obfuscator
 Description: Automatically obfuscate email links in content, excerpts, and elsewhere.
-Version: 2.1
+Version: 2.1.1
 Author: Castlegate IT
 Author URI: http://www.castlegateit.co.uk/
-License: AGPLv3
+License: MIT
 
 */
 
